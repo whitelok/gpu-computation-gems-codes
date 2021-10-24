@@ -31,11 +31,11 @@ set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -rdc=true \
 # 70 include V100
 # 75 include T4
 # 80 include A100
-foreach(SM 75)
-  message(STATUS "Assign GPU architecture (sm=${SM})")
-  set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} \
-      -gencode=arch=compute_${SM},code=\\\"sm_${SM},compute_${SM}\\\"")
-endforeach()
+# foreach(SM 75)
+#   message(STATUS "Assign GPU architecture (sm=${SM})")
+#   set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} \
+#       -gencode=arch=compute_${SM},code=\\\"sm_${SM},compute_${SM}\\\"")
+# endforeach()
 # # for Numerous 050 or lower version, CUDA is not support sm_80
 # if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
 #   message(STATUS "Assign GPU architecture (sm=80)")
@@ -43,12 +43,12 @@ endforeach()
 #       -gencode=arch=compute_80,code=\\\"sm_80,compute_80\\\"")
 # endif()
 
-if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
+# if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
   # Policy CMP0104 is not set: CMAKE_CUDA_ARCHITECTURES now detected for NVCC,
   # empty CUDA_ARCHITECTURES not allowed.  Run "cmake --help-policy CMP0104"
   # for policy details.  Use the cmake_policy command to set the policy and
-  set(CMAKE_CUDA_ARCHITECTURES "61;70;75;80")
-endif()
+  # set(CMAKE_CUDA_ARCHITECTURES "61;70;75;80")
+# endif()
 
 # cuda
 find_package(CUDA REQUIRED)
