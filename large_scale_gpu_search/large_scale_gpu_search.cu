@@ -1,5 +1,7 @@
 // Copyright 2021 karlluo. All rights reserved.
 //
+// P-ary Search on Sorted Lists
+//
 // Author: karlluo
 #include <cuda_runtime.h>
 #include <curand.h>
@@ -19,6 +21,9 @@
 
 #include <common/common_utils.hpp>
 
+// according CUDA docs, each warp has 32 threads
+// block size = 32 can be schedule by 1 warp
+// it is the best way to launch our kernel
 #define BLOCKSIZE 32
 
 template <typename T>
@@ -27,40 +32,76 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
                 thrust::host_vector<T> &h_keys,
                 thrust::device_vector<T> &d_inputs_data,
                 thrust::device_vector<T> &d_keys) {
-  curandGenerator_t curand_gen_handler;
-  auto seed_time = std::chrono::system_clock::now();
-  // Generating random uint64_t array on device for search
-  COMMON_CURAND_CHECK(
-      curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
-  COMMON_CURAND_CHECK(curandSetGeneratorOffset(
-      curand_gen_handler, std::chrono::system_clock::to_time_t(seed_time)));
-  COMMON_CURAND_CHECK(
-      curandSetQuasiRandomGeneratorDimensions(curand_gen_handler, BLOCKSIZE));
-  COMMON_CURAND_CHECK(curandGenerateLongLong(
-      curand_gen_handler,
-      reinterpret_cast<unsigned long long *>(
-          thrust::raw_pointer_cast(d_inputs_data.data())),
-      data_numbers));
-  COMMON_CUDA_CHECK(cudaDeviceSynchronize());
-  COMMON_CURAND_CHECK(
-      curandGenerateLongLong(curand_gen_handler,
-                             reinterpret_cast<unsigned long long *>(
-                                 thrust::raw_pointer_cast(d_keys.data())),
-                             keys_numbers));
-  COMMON_CUDA_CHECK(cudaDeviceSynchronize());
-  COMMON_CURAND_CHECK(curandDestroyGenerator(curand_gen_handler));
+  for (uint64_t idx = 0; idx < data_numbers; ++idx) {
+    h_inputs_data[idx] = idx + 1;
+  }
+  std::random_device rd;
+  std::mt19937_64 generator(rd());
+  std::uniform_int_distribution<uint64_t> uint64_dist;
+  for (uint64_t idx = 0; idx < keys_numbers; ++idx) {
+    h_keys[idx] = uint64_dist(generator) % data_numbers;
+  }
+
+  thrust::copy(h_inputs_data.begin(), h_inputs_data.end(),
+               d_inputs_data.begin());
+  thrust::copy(h_keys.begin(), h_keys.end(), d_keys.begin());
+
+  // curandGenerator_t curand_gen_handler;
+  // auto seed_time = std::chrono::system_clock::now();
+  // // Generating random uint64_t array on device for search
+  // COMMON_CURAND_CHECK(
+  //     curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
+  // COMMON_CURAND_CHECK(curandSetGeneratorOffset(
+  //     curand_gen_handler, std::chrono::system_clock::to_time_t(seed_time)));
+  // COMMON_CURAND_CHECK(
+  //     curandSetQuasiRandomGeneratorDimensions(curand_gen_handler,
+  //     BLOCKSIZE));
+  // COMMON_CURAND_CHECK(curandGenerateLongLong(
+  //     curand_gen_handler,
+  //     reinterpret_cast<unsigned long long *>(
+  //         thrust::raw_pointer_cast(d_inputs_data.data())),
+  //     data_numbers));
+  // COMMON_CUDA_CHECK(cudaDeviceSynchronize());
+  // COMMON_CURAND_CHECK(
+  //     curandGenerateLongLong(curand_gen_handler,
+  //                            reinterpret_cast<unsigned long long *>(
+  //                                thrust::raw_pointer_cast(d_keys.data())),
+  //                            keys_numbers));
+  // COMMON_CUDA_CHECK(cudaDeviceSynchronize());
+  // COMMON_CURAND_CHECK(curandDestroyGenerator(curand_gen_handler));
 }
 
-// cache for boundary keys indexed by threadId shared int cache[BLOCKSIZE+2] ;
-// index to subset for current iteration shared int range offset;
+// cache for boundary keys indexed by threadId shared int cache[BLOCKSIZE+2]
+// index to subset for current iteration shared int range offset
+// each block respond to one key searching
 template <typename T>
-__global__ void pary_search_gpu(const T *__restrict__ data,
-                                const T *__restrict__ search_keys,
-                                size_t range_length, T *result) {
-  __shared__ int cache[BLOCKSIZE + 2];
-  __shared__ int range_offset;
-  size_t search_key = range_length;
+__global__ void pary_search_gpu_kernel(const T *__restrict__ data,
+                                       const T *__restrict__ search_keys,
+                                       const T invalid_key_tag,
+                                       size_t range_length, T *result) {
+  // __shared__ int cache[BLOCKSIZE + 2];
+  // __shared__ int range_offset;
+  // size_t search_key = range_length;
   // size_t old_range_length = range_start;
+  // // initialize search range using a single thread
+  // if (threadId.x == 0) {
+  //   range_offset = 0;
+  //   cache[BLOCKSIZE] = invalid_key_tag;
+  //   cache[BLOCKSIZE + 1] = search_keys[blockIdx.x];
+  // }
+  // __synchthreads();
+  // search_key = cache[BLOCKSIZE + 1];
+  // while (range_length > BLOCKSIZE) {
+  //   range_length = range_length / BLOCKSIZE;
+  //   // check for division underflow
+  //   if (range_length * BLOCKSIZE < old_range_length) {
+  //     range_length += 1;
+  //   }
+  //   old_range_length = range_length;
+  //   // cache the boundary keys
+  //   range_start = range_offset + threadIdx.x * range_length;
+  //   cache[threadIdx.x] = data[range_start];
+  // }
 }
 
 int main(int argc, char *argv[]) {
@@ -68,8 +109,8 @@ int main(int argc, char *argv[]) {
   cudaSetDevice(0);
   // 500MB numbers need for search
   size_t DATA_NUMBERS = 500 * 1024 * 1024;
-  // 10MB numbers keys for search
-  size_t KEYS_NUMBERS = 10 * 1024 * 1024;
+  // 1KB numbers keys for search
+  size_t KEYS_NUMBERS = 1 * 1024;
 
   thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
   thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
@@ -84,10 +125,11 @@ int main(int argc, char *argv[]) {
   InitInputs<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
                        d_inputs_data, d_keys);
 
-  // pary_search_gpu<uint64_t><<<1, 1, 0, cuda_stream>>>(
-  //     thrust::raw_pointer_cast(d_inputs_data.data()),
-  //     thrust::raw_pointer_cast(d_keys.data()), DATA_NUMBERS,
-  //     thrust::raw_pointer_cast(d_result.data()));
+  pary_search_gpu_kernel<uint64_t><<<KEYS_NUMBERS, BLOCKSIZE, 0, cuda_stream>>>(
+      thrust::raw_pointer_cast(d_inputs_data.data()),
+      thrust::raw_pointer_cast(d_keys.data()),
+      std::numeric_limits<uint64_t>::max(), DATA_NUMBERS,
+      thrust::raw_pointer_cast(d_result.data()));
 
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
