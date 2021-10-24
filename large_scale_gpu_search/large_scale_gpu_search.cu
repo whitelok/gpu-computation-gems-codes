@@ -14,6 +14,8 @@
 #include <thrust/random.h>
 #include <thrust/transform.h>
 
+#include <common/common_utils.hpp>
+
 #define BLOCKSIZE 32
 
 template <typename T>
@@ -22,14 +24,14 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
                 thrust::host_vector<T> &h_keys,
                 thrust::device_vector<T> &d_inputs_data,
                 thrust::device_vector<T> &d_keys) {
-  uint64_t * d_r;
-  curandGenerator_t gen;
-
-  cudaMalloc(&d_r, data_numbers * sizeof(uint64_t));
-
-  curandCreateGenerator(&gen, CURAND_RNG_QUASI_SOBOL64);
-  curandSetPseudoRandomGeneratorSeed(gen, 1278459ull);
-  curandGenerateLongLong(gen, (unsigned long long *)d_r, data_numbers);
+  uint64_t *d_r;
+  curandGenerator_t curand_gen_handle;
+  // Generating random uint64_t for search
+  COMMON_CURAND_CHECK(
+      curandCreateGenerator(&curand_gen_handle, CURAND_RNG_QUASI_SOBOL64));
+  curandSetPseudoRandomGeneratorSeed(curand_gen_handle, data_numbers);
+  curandGenerateLongLong(curand_gen_handle, (unsigned long long *)d_r,
+                         data_numbers);
 
   // return d_r;
 }
@@ -47,8 +49,9 @@ int main(int argc, char *argv[]) {
 
   thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
   thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
-  thrust::device_vector<uint64_t> d_inputs_data;
-  thrust::device_vector<uint64_t> d_keys;
+  thrust::device_vector<uint64_t> d_inputs_data(DATA_NUMBERS);
+  thrust::device_vector<uint64_t> d_keys(KEYS_NUMBERS);
   // init random numbers for demo
-  InitInputs<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys, d_inputs_data, d_keys);
+  InitInputs<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
+                       d_inputs_data, d_keys);
 }
