@@ -30,7 +30,7 @@ void InitInputs(const uint64_t data_numbers, const uint64_t keys_numbers,
   cudaMalloc(&d_r, data_numbers * sizeof(uint64_t));
   // Generating random uint64_t for search
   COMMON_CURAND_CHECK(curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
-  COMMON_CURAND_CHECK(curandSetPseudoRandomGeneratorSeed(curand_gen_handler, 1278459ull););
+  COMMON_CURAND_CHECK(curandSetPseudoRandomGeneratorSeed(curand_gen_handler, 1278459ull));
   COMMON_CURAND_CHECK(curandGenerateLongLong(curand_gen_handler, (unsigned long long *)d_r, data_numbers));
   // std::cout << d_inputs_data[0] << std::endl;
 }
