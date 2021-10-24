@@ -60,3 +60,6 @@ list(APPEND THIRD_PARTY_LIBS ${CUDA_LIBRARIES}
 find_package(CUDNN REQUIRED)
 include_directories(${CUDNN_INCLUDE_DIR})
 list(APPEND THIRD_PARTY_LIBS ${CUDNN_LIBRARIES})
+
+# Large-Scale GPU Search
+add_subdirectory(large_scale_gpu_search)
