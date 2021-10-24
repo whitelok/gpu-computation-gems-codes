@@ -45,33 +45,6 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
   thrust::copy(h_inputs_data.begin(), h_inputs_data.end(),
                d_inputs_data.begin());
   thrust::copy(h_keys.begin(), h_keys.end(), d_keys.begin());
-
-  std::cout << d_inputs_data[0] << std::endl;
-  std::cout << d_keys[0] << std::endl;
-
-  // curandGenerator_t curand_gen_handler;
-  // auto seed_time = std::chrono::system_clock::now();
-  // // Generating random uint64_t array on device for search
-  // COMMON_CURAND_CHECK(
-  //     curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
-  // COMMON_CURAND_CHECK(curandSetGeneratorOffset(
-  //     curand_gen_handler, std::chrono::system_clock::to_time_t(seed_time)));
-  // COMMON_CURAND_CHECK(
-  //     curandSetQuasiRandomGeneratorDimensions(curand_gen_handler,
-  //     BLOCKSIZE));
-  // COMMON_CURAND_CHECK(curandGenerateLongLong(
-  //     curand_gen_handler,
-  //     reinterpret_cast<unsigned long long *>(
-  //         thrust::raw_pointer_cast(d_inputs_data.data())),
-  //     data_numbers));
-  // COMMON_CUDA_CHECK(cudaDeviceSynchronize());
-  // COMMON_CURAND_CHECK(
-  //     curandGenerateLongLong(curand_gen_handler,
-  //                            reinterpret_cast<unsigned long long *>(
-  //                                thrust::raw_pointer_cast(d_keys.data())),
-  //                            keys_numbers));
-  // COMMON_CUDA_CHECK(cudaDeviceSynchronize());
-  // COMMON_CURAND_CHECK(curandDestroyGenerator(curand_gen_handler));
 }
 
 // cache for boundary keys indexed by threadId shared int cache[BLOCKSIZE+2]
