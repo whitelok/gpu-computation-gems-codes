@@ -18,6 +18,7 @@
 #include <common/common_utils.hpp>
 
 #define BLOCKSIZE 32
+const unsigned int DEFAULT_SEED = 777;
 
 template <typename T>
 void InitInputs(const uint64_t data_numbers, const uint64_t keys_numbers,
@@ -31,8 +32,8 @@ void InitInputs(const uint64_t data_numbers, const uint64_t keys_numbers,
   // Generating random uint64_t for search
   COMMON_CURAND_CHECK(
       curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
-  // COMMON_CURAND_CHECK(curandSetPseudoRandomGeneratorSeed(curand_gen_handler,
-  // data_numbers));
+  COMMON_CURAND_CHECK(
+      curandSetPseudoRandomGeneratorSeed(curand_gen_handler, DEFAULT_SEED));
   COMMON_CURAND_CHECK(curandGenerateLongLong(
       curand_gen_handler,
       reinterpret_cast<unsigned long long *>(
