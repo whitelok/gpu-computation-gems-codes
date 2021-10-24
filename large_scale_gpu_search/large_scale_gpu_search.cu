@@ -26,7 +26,7 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
                 thrust::device_vector<T> &d_keys) {
   curandGenerator_t curand_gen_handler;
   // Generating random uint64_t for search
-  curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64);
+  COMMON_CURAND_CHECK(curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
   curandSetPseudoRandomGeneratorSeed(curand_gen_handler, data_numbers);
   curandGenerateLongLong(curand_gen_handler,
                          reinterpret_cast<unsigned long long *>(
