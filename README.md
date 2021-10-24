@@ -15,4 +15,8 @@
 ```bash
 git clone https://github.com/whitelok/gpu-computation-gems-codes.git
 cd gpu-computation-gems-codes
+mkdir build
+cmake ..
+make -j8
+./bin/[apps you want to run]
 ```
