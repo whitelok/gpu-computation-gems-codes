@@ -51,7 +51,8 @@ set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -rdc=true \
 # endif()
 
 # cuda
-find_package(CUDA REQUIRED)
+find_package(CUDA)
+set(CMAKE_CUDA_STANDARD 14)
 include_directories(${CUDA_INCLUDE_DIRS})
 list(APPEND THIRD_PARTY_LIBS ${CUDA_LIBRARIES}
                              ${CUDA_CUBLAS_LIBRARIES}
