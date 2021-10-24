@@ -8,3 +8,4 @@ set_target_properties(
   large_scale_gpu_search
         PROPERTIES
         CUDA_SEPARABLE_COMPILATION ON)
+        target_link_libraries(large_scale_gpu_search -lcurand)
