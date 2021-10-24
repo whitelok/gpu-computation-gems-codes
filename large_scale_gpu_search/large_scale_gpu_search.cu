@@ -11,6 +11,8 @@
 #include <thrust/random.h>
 #include <thrust/transform.h>
 
+#define BLOCKSIZE 32
+
 template <typename T>
 void InitInputs(const size_t data_numbers, const size_t keys_numbers,
                 thrust::host_vector<T> &h_inputs_data,
