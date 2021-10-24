@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <random>
 #include <type_traits>
+#include <iostream>
 
 #include <thrust/device_vector.h>
 #include <thrust/fill.h>
@@ -32,6 +33,7 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
                          reinterpret_cast<unsigned long long *>(
                              thrust::raw_pointer_cast(d_inputs_data.data())),
                          data_numbers));
+  std::cout << d_inputs_data[0] << std::endl;
 }
 
 // cache for boundary keys indexed by threadId shared int cache[BLOCKSIZE+2] ;
