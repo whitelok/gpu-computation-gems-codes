@@ -4,12 +4,12 @@
 #include <cuda_runtime.h>
 #include <curand.h>
 
+#include <chrono>
 #include <cstdint>
+#include <ctime>
 #include <iostream>
 #include <random>
 #include <type_traits>
-#include <ctime>
-#include <chrono>
 
 #include <thrust/device_vector.h>
 #include <thrust/fill.h>
@@ -32,8 +32,10 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
   // Generating random uint64_t for search
   COMMON_CURAND_CHECK(
       curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
-  curandSetGeneratorOffset(curand_gen_handler, std::chrono::system_clock::to_time_t(seed_time));
-  curandSetQuasiRandomGeneratorDimensions(curand_gen_handler, keys_numbers);
+  COMMON_CURAND_CHECK(curandSetGeneratorOffset(
+      curand_gen_handler, std::chrono::system_clock::to_time_t(seed_time)));
+  COMMON_CURAND_CHECK(curandSetQuasiRandomGeneratorDimensions(
+      curand_gen_handler, keys_numbers));
   COMMON_CURAND_CHECK(curandGenerateLongLong(
       curand_gen_handler,
       reinterpret_cast<unsigned long long *>(
