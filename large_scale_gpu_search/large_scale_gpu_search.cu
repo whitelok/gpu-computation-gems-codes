@@ -55,18 +55,17 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
                                        const T *__restrict__ search_keys,
                                        const T invalid_key_tag,
                                        size_t range_length, T *result) {
-  // __shared__ int cache[BLOCKSIZE + 2];
-  // __shared__ int range_offset;
-  // size_t search_key = range_length;
+  __shared__ T cache[BLOCKSIZE + 2];
+  __shared__ size_t range_offset;
   // size_t old_range_length = range_start;
-  // // initialize search range using a single thread
-  // if (threadId.x == 0) {
-  //   range_offset = 0;
-  //   cache[BLOCKSIZE] = invalid_key_tag;
-  //   cache[BLOCKSIZE + 1] = search_keys[blockIdx.x];
-  // }
-  // __synchthreads();
-  // search_key = cache[BLOCKSIZE + 1];
+  // initialize search range using a single thread
+  if (threadId.x == 0) {
+    range_offset = 0;
+    cache[BLOCKSIZE] = invalid_key_tag;
+    cache[BLOCKSIZE + 1] = search_keys[blockIdx.x];
+  }
+  __synchthreads();
+  T search_key = cache[BLOCKSIZE + 1];
   // while (range_length > BLOCKSIZE) {
   //   range_length = range_length / BLOCKSIZE;
   //   // check for division underflow
