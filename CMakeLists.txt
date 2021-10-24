@@ -40,9 +40,9 @@ if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
       -gencode=arch=compute_80,code=\\\"sm_80,compute_80\\\"")
 endif()
 if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
-  Policy CMP0104 is not set: CMAKE_CUDA_ARCHITECTURES now detected for NVCC,
-  empty CUDA_ARCHITECTURES not allowed.  Run "cmake --help-policy CMP0104"
-  for policy details.  Use the cmake_policy command to set the policy and
+  # Policy CMP0104 is not set: CMAKE_CUDA_ARCHITECTURES now detected for NVCC,
+  # empty CUDA_ARCHITECTURES not allowed.  Run "cmake --help-policy CMP0104"
+  # for policy details.  Use the cmake_policy command to set the policy and
   set(CMAKE_CUDA_ARCHITECTURES "61;70;75;80")
 endif()
 
