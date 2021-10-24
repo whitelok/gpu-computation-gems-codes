@@ -38,6 +38,7 @@ void InitInputs(const uint64_t data_numbers, const uint64_t keys_numbers,
       reinterpret_cast<unsigned long long *>(
           thrust::raw_pointer_cast(d_inputs_data.data())),
       data_numbers));
+  COMMON_CUDA_CHECK(cudaDeviceSynchronize());
   std::cout << d_inputs_data[0] << std::endl;
 }
 
