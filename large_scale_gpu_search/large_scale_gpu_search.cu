@@ -5,9 +5,9 @@
 #include <curand.h>
 
 #include <cstdint>
+#include <iostream>
 #include <random>
 #include <type_traits>
-#include <iostream>
 
 #include <thrust/device_vector.h>
 #include <thrust/fill.h>
@@ -26,13 +26,19 @@ void InitInputs(const uint64_t data_numbers, const uint64_t keys_numbers,
                 thrust::device_vector<T> &d_inputs_data,
                 thrust::device_vector<T> &d_keys) {
   curandGenerator_t curand_gen_handler;
-  uint64_t * d_r;
-  cudaMalloc(&d_r, data_numbers * sizeof(uint64_t));
+  // uint64_t * d_r;
+  // cudaMalloc(&d_r, data_numbers * sizeof(uint64_t));
   // Generating random uint64_t for search
-  COMMON_CURAND_CHECK(curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
-  // COMMON_CURAND_CHECK(curandSetPseudoRandomGeneratorSeed(curand_gen_handler, data_numbers));
-  COMMON_CURAND_CHECK(curandGenerateLongLong(curand_gen_handler, (unsigned long long *)d_r, data_numbers));
-  // std::cout << d_inputs_data[0] << std::endl;
+  COMMON_CURAND_CHECK(
+      curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
+  // COMMON_CURAND_CHECK(curandSetPseudoRandomGeneratorSeed(curand_gen_handler,
+  // data_numbers));
+  COMMON_CURAND_CHECK(curandGenerateLongLong(
+      curand_gen_handler,
+      reinterpret_cast<unsigned long long *>(
+          thrust::raw_pointer_cast(d_inputs_data.data())),
+      data_numbers));
+  std::cout << d_inputs_data[0] << std::endl;
 }
 
 // cache for boundary keys indexed by threadId shared int cache[BLOCKSIZE+2] ;
