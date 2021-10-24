@@ -1,7 +1,11 @@
 // Copyright 2021 karlluo. All rights reserved.
 //
 // Author: karlluo
-#include <thrust.h>
+#include <thrust/device_vector.h>
+#include <thrust/fill.h>
+#include <thrust/iterator/counting_iterator.h>
+#include <thrust/random.h>
+#include <thrust/transform.h>
 
 template <typename T>
 void InitInputs(thrust::host_vector<T> &h_inputs_data,
