@@ -23,6 +23,12 @@
     }                                                                          \
   } while (0)
 
+// more friendly to clang-format than <<<>>>
+#define CUDA_LAUNCH_KERNEL(kernel, grid_dims, block_dims, shm_size, stream, \
+                           ...)                                             \
+  kernel<<<grid_dims, block_dims, shm_size, stream>>>(__VA_ARGS__);         \
+  CudaCheck(CODE_LOCATION, cudaGetLastError())
+
 static const char *curandGetErrorString(curandStatus_t error) {
   switch (error) {
   case CURAND_STATUS_SUCCESS:
