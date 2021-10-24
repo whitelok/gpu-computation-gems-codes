@@ -59,7 +59,7 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
   __shared__ size_t range_offset;
   // size_t old_range_length = range_start;
   // initialize search range using a single thread
-  if (threadId.x == 0) {
+  if (threadIdx.x == 0) {
     range_offset = 0;
     cache[BLOCKSIZE] = invalid_key_tag;
     cache[BLOCKSIZE + 1] = search_keys[blockIdx.x];
