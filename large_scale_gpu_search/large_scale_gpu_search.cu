@@ -64,7 +64,7 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
     cache[BLOCKSIZE] = invalid_key_tag;
     cache[BLOCKSIZE + 1] = search_keys[blockIdx.x];
   }
-  __synchthreads();
+  __syncthreads();
   T search_key = cache[BLOCKSIZE + 1];
   // while (range_length > BLOCKSIZE) {
   //   range_length = range_length / BLOCKSIZE;
