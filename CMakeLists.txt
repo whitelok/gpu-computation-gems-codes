@@ -47,7 +47,7 @@ if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
 endif()
 
 # cuda
-find_package(CUDA REQUIED)
+find_package(CUDA REQUIRED)
 include_directories(${CUDA_INCLUDE_DIRS})
 list(APPEND THIRD_PARTY_LIBS ${CUDA_LIBRARIES}
                              ${CUDA_CUBLAS_LIBRARIES}
