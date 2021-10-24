@@ -78,9 +78,9 @@ int main(int argc, char *argv[]) {
                        d_inputs_data, d_keys);
 
   pary_search_gpu<uint64_t><<<1, 1, 0, cuda_stream>>>(
-                     thrust::raw_pointer_cast(d_inputs_data.data()),
-                     thrust::raw_pointer_cast(d_keys.data()), DATA_NUMBERS,
-                     thrust::raw_pointer_cast(d_result.data()));
+      thrust::raw_pointer_cast(d_inputs_data.data()),
+      thrust::raw_pointer_cast(d_keys.data()), DATA_NUMBERS,
+      thrust::raw_pointer_cast(d_result.data()));
 
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
