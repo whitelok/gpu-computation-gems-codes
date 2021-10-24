@@ -31,7 +31,7 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
   // Generating random uint64_t for search
   COMMON_CURAND_CHECK(curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SCRAMBLED_SOBOL64));
   COMMON_CURAND_CHECK(curandSetPseudoRandomGeneratorSeed(curand_gen_handler, 1278459ull));
-  COMMON_CURAND_CHECK(curandGenerateLongLong(curand_gen_handler, d_r, data_numbers));
+  COMMON_CURAND_CHECK(curandGenerateLongLong(curand_gen_handler, (unsigned long long *)d_r, data_numbers));
   // std::cout << d_inputs_data[0] << std::endl;
 }
 
