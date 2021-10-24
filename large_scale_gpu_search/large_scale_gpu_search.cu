@@ -9,6 +9,7 @@
 #include <random>
 #include <type_traits>
 #include <ctime>
+#include <chrono>
 
 #include <thrust/device_vector.h>
 #include <thrust/fill.h>
@@ -27,10 +28,11 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
                 thrust::device_vector<T> &d_inputs_data,
                 thrust::device_vector<T> &d_keys) {
   curandGenerator_t curand_gen_handler;
+  auto seed_time = std::chrono::system_clock::now();
   // Generating random uint64_t for search
   COMMON_CURAND_CHECK(
       curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
-  curandSetGeneratorOffset(curand_gen_handler, std::time(static_cast<int>(keys_numbers)));
+  curandSetGeneratorOffset(curand_gen_handler, std::chrono::system_clock::to_time_t(seed_time));
   curandSetQuasiRandomGeneratorDimensions(curand_gen_handler, keys_numbers);
   COMMON_CURAND_CHECK(curandGenerateLongLong(
       curand_gen_handler,
