@@ -18,7 +18,6 @@
 #include <common/common_utils.hpp>
 
 #define BLOCKSIZE 32
-const unsigned int DEFAULT_SEED = 777;
 
 template <typename T>
 void InitInputs(const uint64_t data_numbers, const uint64_t keys_numbers,
@@ -27,8 +26,6 @@ void InitInputs(const uint64_t data_numbers, const uint64_t keys_numbers,
                 thrust::device_vector<T> &d_inputs_data,
                 thrust::device_vector<T> &d_keys) {
   curandGenerator_t curand_gen_handler;
-  // uint64_t * d_r;
-  // cudaMalloc(&d_r, data_numbers * sizeof(uint64_t));
   // Generating random uint64_t for search
   COMMON_CURAND_CHECK(
       curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
