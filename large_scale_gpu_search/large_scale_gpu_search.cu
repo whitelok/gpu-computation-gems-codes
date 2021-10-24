@@ -33,7 +33,7 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
   COMMON_CURAND_CHECK(
       curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
   COMMON_CURAND_CHECK(curandSetGeneratorOffset(
-      curand_gen_handler, std::time(10)));
+      curand_gen_handler, std::time(0)));
   COMMON_CURAND_CHECK(curandSetQuasiRandomGeneratorDimensions(
       curand_gen_handler, keys_numbers));
   COMMON_CURAND_CHECK(curandGenerateLongLong(
