@@ -27,8 +27,7 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
   uint64_t *d_r;
   curandGenerator_t curand_gen_handler;
   // Generating random uint64_t for search
-  COMMON_CURAND_CHECK(
-      curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
+  curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64);
   curandSetPseudoRandomGeneratorSeed(curand_gen_handler, data_numbers);
   curandGenerateLongLong(curand_gen_handler, thrust::raw_pointer_cast(d_inputs_data.data())),
                          data_numbers);
