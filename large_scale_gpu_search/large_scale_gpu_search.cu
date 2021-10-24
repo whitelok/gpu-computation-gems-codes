@@ -1,5 +1,5 @@
 
-#include<thrust.h>
+// #include<thrust.h>
 
 int main() {
 
