@@ -49,8 +49,8 @@ int main(int argc, char *argv[]) {
 
   thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
   thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
-  thrust::device_vector<uint64_t> d_inputs_data(DATA_NUMBERS);
-  thrust::device_vector<uint64_t> d_keys(KEYS_NUMBERS);
+  thrust::device_vector<uint64_t> d_inputs_data(h_inputs_data);
+  thrust::device_vector<uint64_t> d_keys(h_keys);
   // init random numbers for demo
   InitInputs<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
                        d_inputs_data, d_keys);
