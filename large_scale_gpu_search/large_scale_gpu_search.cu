@@ -46,6 +46,9 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
                d_inputs_data.begin());
   thrust::copy(h_keys.begin(), h_keys.end(), d_keys.begin());
 
+  std::cout << d_inputs_data[0] << std::endl;
+  std::cout << d_keys[0] << std::endl;
+
   // curandGenerator_t curand_gen_handler;
   // auto seed_time = std::chrono::system_clock::now();
   // // Generating random uint64_t array on device for search
