@@ -24,7 +24,6 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
                 thrust::host_vector<T> &h_keys,
                 thrust::device_vector<T> &d_inputs_data,
                 thrust::device_vector<T> &d_keys) {
-  uint64_t *d_r;
   curandGenerator_t curand_gen_handler;
   // Generating random uint64_t for search
   curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64);
