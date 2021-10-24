@@ -53,10 +53,6 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
 
 // cache for boundary keys indexed by threadId shared int cache[BLOCKSIZE+2] ;
 // index to subset for current iteration shared int range offset;
-
-
-
-
 template <typename T>
 __global__ void pary_search_gpu(const T *__restrict__ data,
                                 const T *__restrict__ search_keys,
