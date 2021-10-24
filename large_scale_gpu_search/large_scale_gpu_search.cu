@@ -8,6 +8,7 @@
 #include <iostream>
 #include <random>
 #include <type_traits>
+#include <ctime>
 
 #include <thrust/device_vector.h>
 #include <thrust/fill.h>
