@@ -11,7 +11,7 @@
     if (retval != cudaSuccess) {                                               \
       std::cerr << "Error at " << std::to_string(__LINE__) << ": "             \
                 << cudaGetErrorString(retval) << std::endl;                    \
-      return false;                                                            \
+      \                                                                        \
     }                                                                          \
   } while (0)
 
@@ -21,7 +21,7 @@
     if (retval != CURAND_STATUS_SUCCESS) {                                     \
       std::cerr << "Error at " << std::to_string(__LINE__) << ": "             \
                 << curandGetErrorString(retval) << std::endl;                  \
-      return false;                                                            \
+      \                                                                        \
     }                                                                          \
   } while (0)
 
