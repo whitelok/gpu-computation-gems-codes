@@ -8,7 +8,7 @@
 
  1. Cmake 3.8.0+
  2. CUDA 9.0+
- 3. GCC 4.8.5+
+ 3. GCC 7+
 
 ## Compile && Run
 
