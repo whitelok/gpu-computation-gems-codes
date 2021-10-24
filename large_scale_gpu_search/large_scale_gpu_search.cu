@@ -20,7 +20,7 @@
 #define BLOCKSIZE 32
 
 template <typename T>
-void InitInputs(const size_t data_numbers, const size_t keys_numbers,
+void InitInputs(const uint64_t data_numbers, const uint64_t keys_numbers,
                 thrust::host_vector<T> &h_inputs_data,
                 thrust::host_vector<T> &h_keys,
                 thrust::device_vector<T> &d_inputs_data,
@@ -42,9 +42,9 @@ __shared__ int cache[BLOCKSIZE + 2];
 
 int main(int argc, char *argv[]) {
   // 500MB numbers need for search
-  size_t DATA_NUMBERS = 500 * 1024 * 1024;
+  uint64_t DATA_NUMBERS = 500 * 1024 * 1024;
   // 10MB numbers keys for search
-  size_t KEYS_NUMBERS = 10 * 1024 * 1024;
+  uint64_t KEYS_NUMBERS = 10 * 1024 * 1024;
 
   thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
   thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
