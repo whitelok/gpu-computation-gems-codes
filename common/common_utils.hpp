@@ -23,6 +23,11 @@
     }                                                                          \
   } while (0)
 
+template <typename Error>
+void CudaCheck(const char* code_location, Error error);
+
+#define CUDA_CHECK(...) CudaCheck(CODE_LOCATION, __VA_ARGS__)
+
 // more friendly to clang-format than <<<>>>
 #define CUDA_LAUNCH_KERNEL(kernel, grid_dims, block_dims, shm_size, stream, \
                            ...)                                             \
@@ -73,3 +78,33 @@ static const char *curandGetErrorString(curandStatus_t error) {
 
   return "<unknown>";
 }
+
+template <>
+void CudaCheck(const char* code_location, cudaError_t error) {
+  CHECK_EQ_F(error, cudaSuccess, "{} {}", code_location,
+             cudaGetErrorString(error));
+}
+
+// template <>
+// void CudaCheck(const char* code_location, cublasStatus_t error) {
+//   CHECK_EQ_F(error, CUBLAS_STATUS_SUCCESS, "{} {}", code_location,
+//              CublasGetErrorString(error));
+// }
+
+// template <>
+// void CudaCheck(const char* code_location, cudnnStatus_t error) {
+//   CHECK_EQ_F(error, CUDNN_STATUS_SUCCESS, "{} {}", code_location,
+//              cudnnGetErrorString(error));
+// }
+
+template <>
+void CudaCheck(const char* code_location, curandStatus error) {
+  CHECK_EQ_F(error, CURAND_STATUS_SUCCESS, "{} {}", code_location,
+             CurandGetErrorString(error));
+}
+
+// template <>
+// void CudaCheck(const char* code_location, ncclResult_t error) {
+//   CHECK_EQ_F(error, ncclSuccess, "{} {}", code_location,
+//              ncclGetErrorString(error));
+// }
