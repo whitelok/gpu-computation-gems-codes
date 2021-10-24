@@ -1,6 +1,9 @@
 // Copyright 2021 karlluo. All rights reserved.
 //
 // Author: karlluo
+#include <cuda_runtime.h>
+#include <curand.h>
+
 #include <cstdint>
 #include <random>
 #include <type_traits>
@@ -19,8 +22,16 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
                 thrust::host_vector<T> &h_keys,
                 thrust::device_vector<T> &d_inputs_data,
                 thrust::device_vector<T> &d_keys) {
-  std::random_device rd;
-  std::mt19937 gen(rd());
+  uint64_t * d_r;
+  curandGenerator_t gen;
+
+  cudaMalloc(&d_r, num * sizeof(uint64_t));
+
+  curandCreateGenerator(&gen, CURAND_RNG_QUASI_SOBOL64);
+  curandSetPseudoRandomGeneratorSeed(gen, 1278459ull);
+  curandGenerateLongLong(gen, (unsigned long long *)d_r, num);
+
+  // return d_r;
 }
 
 // cache for boundary keys indexed by threadId shared int cache[BLOCKSIZE+2] ;
