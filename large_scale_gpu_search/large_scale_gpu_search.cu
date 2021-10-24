@@ -25,11 +25,11 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
   uint64_t * d_r;
   curandGenerator_t gen;
 
-  cudaMalloc(&d_r, num * sizeof(uint64_t));
+  cudaMalloc(&d_r, data_numbers * sizeof(uint64_t));
 
   curandCreateGenerator(&gen, CURAND_RNG_QUASI_SOBOL64);
   curandSetPseudoRandomGeneratorSeed(gen, 1278459ull);
-  curandGenerateLongLong(gen, (unsigned long long *)d_r, num);
+  curandGenerateLongLong(gen, (unsigned long long *)d_r, data_numbers);
 
   // return d_r;
 }
@@ -50,5 +50,5 @@ int main(int argc, char *argv[]) {
   thrust::device_vector<uint64_t> d_inputs_data;
   thrust::device_vector<uint64_t> d_keys;
   // init random numbers for demo
-  InitInputs<uint64_t>(h_inputs_data, h_keys, d_inputs_data, d_keys);
+  InitInputs<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys, d_inputs_data, d_keys);
 }
