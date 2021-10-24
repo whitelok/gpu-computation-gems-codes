@@ -33,7 +33,7 @@ void InitInputs(const uint64_t data_numbers, const uint64_t keys_numbers,
   COMMON_CURAND_CHECK(
       curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
   COMMON_CURAND_CHECK(
-      curandSetPseudoRandomGeneratorSeed(curand_gen_handler, DEFAULT_SEED));
+      curandSetPseudoRandomGeneratorSeed(curand_gen_handler, 10.0));
   COMMON_CURAND_CHECK(curandGenerateLongLong(
       curand_gen_handler,
       reinterpret_cast<unsigned long long *>(
