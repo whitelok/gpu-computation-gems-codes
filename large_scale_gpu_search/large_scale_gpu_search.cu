@@ -42,6 +42,8 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
           thrust::raw_pointer_cast(d_inputs_data.data())),
       data_numbers));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
+
+  std::cout << d_inputs_data[0] << std::endl;
 }
 
 // cache for boundary keys indexed by threadId shared int cache[BLOCKSIZE+2] ;
