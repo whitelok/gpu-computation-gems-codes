@@ -25,15 +25,13 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
                 thrust::device_vector<T> &d_inputs_data,
                 thrust::device_vector<T> &d_keys) {
   uint64_t *d_r;
-  curandGenerator_t curand_gen_handle;
+  curandGenerator_t curand_gen_handler;
   // Generating random uint64_t for search
   COMMON_CURAND_CHECK(
-      curandCreateGenerator(&curand_gen_handle, CURAND_RNG_QUASI_SOBOL64));
-  curandSetPseudoRandomGeneratorSeed(curand_gen_handle, data_numbers);
-  curandGenerateLongLong(curand_gen_handle, (unsigned long long *)d_r,
+      curandCreateGenerator(&curand_gen_handler, CURAND_RNG_QUASI_SOBOL64));
+  curandSetPseudoRandomGeneratorSeed(curand_gen_handler, data_numbers);
+  curandGenerateLongLong(curand_gen_handler, thrust::raw_pointer_cast(d_inputs_data.data())),
                          data_numbers);
-
-  // return d_r;
 }
 
 // cache for boundary keys indexed by threadId shared int cache[BLOCKSIZE+2] ;
