@@ -54,13 +54,15 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
 // cache for boundary keys indexed by threadId shared int cache[BLOCKSIZE+2] ;
 // index to subset for current iteration shared int range offset;
 
-// __shared__ int cache[BLOCKSIZE + 2];
+__shared__ int cache[BLOCKSIZE + 2];
+__shared__ int range_offset;
+
 template <typename T>
 __global__ void pary_search_gpu(const T *__restrict__ data,
                                 const T *__restrict__ search_keys,
                                 size_t range_length, T *result) {
   size_t search_key = range_length;
-  // size_t old_range_length = range_start;
+  size_t old_range_length = range_start;
 }
 
 int main(int argc, char *argv[]) {
@@ -84,10 +86,10 @@ int main(int argc, char *argv[]) {
   InitInputs<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
                        d_inputs_data, d_keys);
 
-  pary_search_gpu<uint64_t><<<1, 1, 0, cuda_stream>>>(
-      thrust::raw_pointer_cast(d_inputs_data.data()),
-      thrust::raw_pointer_cast(d_keys.data()), DATA_NUMBERS,
-      thrust::raw_pointer_cast(d_result.data()));
+  // pary_search_gpu<uint64_t><<<1, 1, 0, cuda_stream>>>(
+  //     thrust::raw_pointer_cast(d_inputs_data.data()),
+  //     thrust::raw_pointer_cast(d_keys.data()), DATA_NUMBERS,
+  //     thrust::raw_pointer_cast(d_result.data()));
 
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
