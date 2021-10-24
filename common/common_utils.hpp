@@ -15,6 +15,16 @@
     }                                                                          \
   } while (0)
 
+#define COMMON_CURAND_CHECK(x)                                                 \
+  do {                                                                         \
+    curandStatus_t retval = (x);                                               \
+    if (retval != CURAND_STATUS_SUCCESS) {                                     \
+      std::cerr << "Error at " << std::to_string(__LINE__) << ": "             \
+                << curandGetErrorString(retval) << std::endl;                  \
+      return false;                                                            \
+    }                                                                          \
+  } while (0)
+
 static const char *curandGetErrorString(curandStatus_t error) {
   switch (error) {
   case CURAND_STATUS_SUCCESS:
@@ -59,13 +69,3 @@ static const char *curandGetErrorString(curandStatus_t error) {
 
   return "<unknown>";
 }
-
-#define COMMON_CURAND_CHECK(x)                                                 \
-  do {                                                                         \
-    curandStatus_t retval = (x);                                               \
-    if (retval != CURAND_STATUS_SUCCESS) {                                     \
-      std::cerr << "Error at " << std::to_string(__LINE__) << ": "             \
-                << curandGetErrorString(retval) << std::endl;                  \
-      return false;                                                            \
-    }                                                                          \
-  } while (0)
