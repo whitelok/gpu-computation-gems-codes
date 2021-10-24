@@ -42,11 +42,11 @@ void InitInputs(const size_t data_numbers, const size_t keys_numbers,
           thrust::raw_pointer_cast(d_inputs_data.data())),
       data_numbers));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
-  COMMON_CURAND_CHECK(curandGenerateLongLong(
-    curand_gen_handler,
-    reinterpret_cast<unsigned long long *>(
-        thrust::raw_pointer_cast(d_keys.data())),
-        keys_numbers));
+  COMMON_CURAND_CHECK(
+      curandGenerateLongLong(curand_gen_handler,
+                             reinterpret_cast<unsigned long long *>(
+                                 thrust::raw_pointer_cast(d_keys.data())),
+                             keys_numbers));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
   COMMON_CURAND_CHECK(curandDestroyGenerator(curand_gen_handler));
 }
