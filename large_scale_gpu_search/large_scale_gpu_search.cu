@@ -47,11 +47,11 @@ int main(int argc, char *argv[]) {
   // 10MB numbers keys for search
   size_t KEYS_NUMBERS = 10 * 1024 * 1024;
 
-  thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
-  thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
-  thrust::device_vector<uint64_t> d_inputs_data(DATA_NUMBERS);
-  thrust::device_vector<uint64_t> d_keys(KEYS_NUMBERS);
+  thrust::host_vector<unsigned long long> h_inputs_data(DATA_NUMBERS);
+  thrust::host_vector<unsigned long long> h_keys(KEYS_NUMBERS);
+  thrust::device_vector<unsigned long long> d_inputs_data(DATA_NUMBERS);
+  thrust::device_vector<unsigned long long> d_keys(KEYS_NUMBERS);
   // init random numbers for demo
-  InitInputs<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
+  InitInputs<unsigned long long>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
                        d_inputs_data, d_keys);
 }
