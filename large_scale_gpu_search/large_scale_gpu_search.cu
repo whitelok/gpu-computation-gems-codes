@@ -2,7 +2,7 @@
 //
 // P-ary Search on Sorted Lists
 //
-// Author: karlluo
+// Author: whitelok@gmail.com
 #include <cuda_runtime.h>
 #include <curand.h>
 
@@ -58,7 +58,7 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
   __shared__ T cache[BLOCKSIZE + 2];
   __shared__ size_t range_offset;
   // size_t old_range_length = range_start;
-  // initialize search range using a single thread
+  // NOTE(whitelok): initialize search range using a single thread
   if (threadIdx.x == 0) {
     range_offset = 0;
     cache[BLOCKSIZE] = invalid_key_tag;
@@ -66,17 +66,17 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
   }
   __syncthreads();
   T search_key = cache[BLOCKSIZE + 1];
-  // while (range_length > BLOCKSIZE) {
-  //   range_length = range_length / BLOCKSIZE;
-  //   // check for division underflow
-  //   if (range_length * BLOCKSIZE < old_range_length) {
-  //     range_length += 1;
-  //   }
+  while (range_length > BLOCKSIZE) {
+    range_length = range_length / BLOCKSIZE;
+    // check for division underflow
+    if (range_length * BLOCKSIZE < old_range_length) {
+      range_length += 1;
+    }
   //   old_range_length = range_length;
   //   // cache the boundary keys
   //   range_start = range_offset + threadIdx.x * range_length;
   //   cache[threadIdx.x] = data[range_start];
-  // }
+  }
 }
 
 int main(int argc, char *argv[]) {
