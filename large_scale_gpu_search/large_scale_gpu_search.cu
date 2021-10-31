@@ -98,6 +98,7 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
   }
 }
 
+template <typename KeyType>
 void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
                const size_t rounds) {
   // Just use GPU 0 for demo
@@ -110,11 +111,11 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
   std::cout << "Searching " << KEYS_NUMBERS << " keys in " << DATA_NUMBERS
             << " numbers data with " << rounds << " rounds " << std::endl;
 
-  thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
-  thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
+  thrust::host_vector<KeyType> h_inputs_data(DATA_NUMBERS);
+  thrust::host_vector<KeyType> h_keys(KEYS_NUMBERS);
   thrust::host_vector<size_t> h_gpu_search_result(KEYS_NUMBERS);
-  thrust::device_vector<uint64_t> d_inputs_data(h_inputs_data);
-  thrust::device_vector<uint64_t> d_keys(h_keys);
+  thrust::device_vector<KeyType> d_inputs_data(h_inputs_data);
+  thrust::device_vector<KeyType> d_keys(h_keys);
   // the result is a key index
   thrust::device_vector<size_t> d_result(KEYS_NUMBERS);
 
@@ -122,26 +123,26 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
   COMMON_CUDA_CHECK(cudaStreamCreate(&cuda_stream));
 
   // init random numbers for demo
-  InitInputs<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
+  InitInputs<KeyType>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
                        d_inputs_data, d_keys);
 
   // Warm up
   for (size_t round = 0; round < 100; ++round) {
-    pary_search_gpu_kernel<uint64_t>
+    pary_search_gpu_kernel<KeyType>
         <<<KEYS_NUMBERS, BLOCKSIZE, 0, cuda_stream>>>(
             thrust::raw_pointer_cast(d_inputs_data.data()),
             thrust::raw_pointer_cast(d_keys.data()),
-            std::numeric_limits<uint64_t>::max(), DATA_NUMBERS,
+            std::numeric_limits<KeyType>::max(), DATA_NUMBERS,
             thrust::raw_pointer_cast(d_result.data()));
   }
 
   cudaEventRecord(t_start);
   for (size_t round = 0; round < rounds; ++round) {
-    pary_search_gpu_kernel<uint64_t>
+    pary_search_gpu_kernel<KeyType>
         <<<KEYS_NUMBERS, BLOCKSIZE, 0, cuda_stream>>>(
             thrust::raw_pointer_cast(d_inputs_data.data()),
             thrust::raw_pointer_cast(d_keys.data()),
-            std::numeric_limits<uint64_t>::max(), DATA_NUMBERS,
+            std::numeric_limits<KeyType>::max(), DATA_NUMBERS,
             thrust::raw_pointer_cast(d_result.data()));
   }
   cudaEventRecord(t_stop);
@@ -178,35 +179,35 @@ int main(int argc, char *argv[]) {
   size_t DATA_NUMBERS = 500 * 1024 * 1024;
   // 1K numbers keys for search
   size_t KEYS_NUMBERS = 1 * 1024;
-  implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
+  implement<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 
   // 1024M numbers need for search
   DATA_NUMBERS = 1024 * 1024 * 1024;
   // 1K numbers keys for search
   KEYS_NUMBERS = 1 * 1024;
-  implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
+  implement<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 
   // 500M numbers need for search
   DATA_NUMBERS = 500 * 1024 * 1024;
   // 1K numbers keys for search
   KEYS_NUMBERS = 16 * 1024;
-  implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
+  implement<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 
   // 500M numbers need for search
   DATA_NUMBERS = 500 * 1024 * 1024;
   // 1M numbers keys for search
   KEYS_NUMBERS = 1024 * 1024;
-  implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
+  implement<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 
   // 1024M numbers need for search
   DATA_NUMBERS = 1024 * 1024 * 1024;
   // 1K numbers keys for search
   KEYS_NUMBERS = 16 * 1024;
-  implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
+  implement<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 
   // 1024M numbers need for search
   DATA_NUMBERS = 1024 * 1024 * 1024;
   // 1M numbers keys for search
   KEYS_NUMBERS = 1024 * 1024;
-  implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
+  implement<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 }
