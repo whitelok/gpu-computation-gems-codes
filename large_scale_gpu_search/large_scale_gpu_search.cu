@@ -108,8 +108,9 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
   cudaEventCreate(&t_stop);
 
   // std::cout << "Searching " << std::endl;
-  std::cout << "> " << type_name<KeyType>() << " Searching " << KEYS_NUMBERS << " keys in " << DATA_NUMBERS
-            << " numbers data with " << rounds << " rounds " << std::endl;
+  std::cout << "> " << type_name<KeyType>() << " Searching " << KEYS_NUMBERS
+            << " keys in " << DATA_NUMBERS << " numbers data with " << rounds
+            << " rounds " << std::endl;
 
   thrust::host_vector<KeyType> h_inputs_data(DATA_NUMBERS);
   thrust::host_vector<KeyType> h_keys(KEYS_NUMBERS);
@@ -124,7 +125,7 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
 
   // init random numbers for demo
   InitInputs<KeyType>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
-                       d_inputs_data, d_keys);
+                      d_inputs_data, d_keys);
 
   // Warm up
   for (size_t round = 0; round < 100; ++round) {
