@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
   thrust::copy(d_result.begin(), d_result.end(), h_gpu_search_result.begin());
 
   bool is_equal = true;
-  for (const size_t idx = 0; idx < KEYS_NUMBERS; ++idx) {
+  for (size_t idx = 0; idx < KEYS_NUMBERS; ++idx) {
     if (d_inputs_data[h_gpu_search_result[idx]] != h_keys[idx]) {
       is_equal = false;
     }
