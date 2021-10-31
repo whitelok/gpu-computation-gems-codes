@@ -132,6 +132,11 @@ int main(int argc, char *argv[]) {
   std::cout << h_gpu_search_result[0] << ", " << h_gpu_search_result[1]
             << std::endl;
 
+  std::cout << d_inputs_data[h_gpu_search_result[0]] << ", "
+            << d_inputs_data[h_gpu_search_result[1]] << std::endl;
+
+  std::cout << h_keys[0] << ", " << h_keys[1] << std::endl;
+
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
   COMMON_CUDA_CHECK(cudaStreamDestroy(cuda_stream));
