@@ -62,6 +62,7 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
   if (threadIdx.x == 0) {
     range_offset = 0;
     cache[BLOCKSIZE] = invalid_key_tag;
+    // means each block own's one search key
     cache[BLOCKSIZE + 1] = search_keys[blockIdx.x];
   }
   __syncthreads();
