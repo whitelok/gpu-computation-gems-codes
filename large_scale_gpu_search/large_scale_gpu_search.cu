@@ -163,8 +163,8 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
   }
   std::cout << "Correct? : " << is_equal << std::endl;
 
-  std::cout << "Elasped: " << static_cast<float>(milliseconds / rounds) << " ms"
-            << std::endl;
+  std::cout << "One round search average elasped: "
+            << static_cast<float>(milliseconds / rounds) << " ms" << std::endl;
 
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
