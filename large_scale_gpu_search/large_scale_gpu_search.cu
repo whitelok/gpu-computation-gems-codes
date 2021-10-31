@@ -106,6 +106,8 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
   cudaEventCreate(&t_start);
   cudaEventCreate(&t_stop);
 
+  std::cout << "Searching " << KEYS_NUMBERS " keys in " << DATA_NUMBERS << " numbers data with " << rounds << " rounds" << std::endl;
+
   thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
   thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
   thrust::host_vector<size_t> h_gpu_search_result(KEYS_NUMBERS);
