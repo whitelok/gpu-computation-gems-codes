@@ -212,9 +212,9 @@ int main(int argc, char *argv[]) {
   implement<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 
   // 500M numbers need for search
-  size_t DATA_NUMBERS = 500 * 1024 * 1024;
+  DATA_NUMBERS = 500 * 1024 * 1024;
   // 1K numbers keys for search
-  size_t KEYS_NUMBERS = 1 * 1024;
+  KEYS_NUMBERS = 1 * 1024;
   implement<uint32_t>(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 
   // 1024M numbers need for search
