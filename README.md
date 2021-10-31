@@ -1,4 +1,4 @@
-# GPU Computing Gems Jade Edition 2012 - Demo Codes
+# GPU Computing Gems Jade 2012 Edition - Demo Codes
 
 GPU Computing Gems Jade 2012 Edition实用示例代码
 
