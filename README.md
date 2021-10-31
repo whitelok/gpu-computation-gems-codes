@@ -31,7 +31,7 @@ make -j8
 
  - GPU: V100 * 1
  
-|  data type  |  data length  |  keys number  |
+|  data type  |  data length  |  keys number  |  time elaps  |
 |  ----  |  ----  |  ----  |
 |  uint64_t  |  524288000  |  1024  |
 |  uint64_t  |  524288000  |  1024  |

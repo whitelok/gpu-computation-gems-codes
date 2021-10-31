@@ -98,13 +98,12 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
   }
 }
 
-int main(int argc, char *argv[]) {
+void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS) {
   // Just use GPU 0 for demo
   cudaSetDevice(0);
-  // 500MB numbers need for search
-  size_t DATA_NUMBERS = 500 * 1024 * 1024;
-  // 1KB numbers keys for search
-  size_t KEYS_NUMBERS = 1 * 1024;
+  cudaEvent_t t_start, t_stop;
+  cudaEventCreate(&t_start);
+  cudaEventCreate(&t_stop);
 
   thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
   thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
@@ -121,12 +120,23 @@ int main(int argc, char *argv[]) {
   InitInputs<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
                        d_inputs_data, d_keys);
 
-  pary_search_gpu_kernel<uint64_t><<<KEYS_NUMBERS, BLOCKSIZE, 0, cuda_stream>>>(
-      thrust::raw_pointer_cast(d_inputs_data.data()),
-      thrust::raw_pointer_cast(d_keys.data()),
-      std::numeric_limits<uint64_t>::max(), DATA_NUMBERS,
-      thrust::raw_pointer_cast(d_result.data()));
+  cudaEventRecord(t_start);
+  for (size_t round = 0; round < rounds; ++round) {
+    pary_search_gpu_kernel<uint64_t>
+        <<<KEYS_NUMBERS, BLOCKSIZE, 0, cuda_stream>>>(
+            thrust::raw_pointer_cast(d_inputs_data.data()),
+            thrust::raw_pointer_cast(d_keys.data()),
+            std::numeric_limits<uint64_t>::max(), DATA_NUMBERS,
+            thrust::raw_pointer_cast(d_result.data()));
+  }
+  cudaEventRecord(t_stop);
+
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
+
+  cudaEventSynchronize(t_stop);
+  float milliseconds = 0;
+  cudaEventElapsedTime(&milliseconds, t_start, t_stop);
+
   // copy back the result
   thrust::copy(d_result.begin(), d_result.end(), h_gpu_search_result.begin());
 
@@ -136,9 +146,21 @@ int main(int argc, char *argv[]) {
       is_equal = "false";
     }
   }
-  std::cout << "Is the result correct? " << is_equal << std::endl;
+  std::cout << "Correct? : " << is_equal << std::endl;
+
+  std::cout << "Elasped: " << milliseconds << " ms" << std::endl;
 
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
   COMMON_CUDA_CHECK(cudaStreamDestroy(cuda_stream));
+}
+
+int main(int argc, char *argv[]) {
+  size_t rounds = 1000;
+
+  // 500M numbers need for search
+  size_t DATA_NUMBERS = 500 * 1024 * 1024;
+  // 1K numbers keys for search
+  size_t KEYS_NUMBERS = 1 * 1024;
+  implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 }
