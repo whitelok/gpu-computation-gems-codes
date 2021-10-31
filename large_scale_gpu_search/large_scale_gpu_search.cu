@@ -84,11 +84,17 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
 
     // if the seached key is within this thread’s subset,
     // make it the one for the next iteration
-    if (search_key>=cache[threadIdx.x] && search_key<cache[threadIdx.x+1]) {
+    if (search_key >= cache[threadIdx.x] &&
+        search_key < cache[threadIdx.x + 1]) {
       range_offset = range_start;
     }
     // all threads need to start next iteration with the new subset
     __syncthreads();
+  }
+  // store search result
+  range_start = range_offset + threadIdx.x;
+  if (search_key == data[range_start]) {
+    results[blockIdx.x] = range_start;
   }
 }
 
