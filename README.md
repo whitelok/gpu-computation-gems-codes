@@ -31,7 +31,7 @@ make -j8
 
  - GPU: V100 * 1
  
-|  data length  |  keys number  |
-|  ----  | ----  |
-| 单元格  | 单元格 |
-| 单元格  | 单元格 |
+|  data type  |  data length  |  keys number  |
+|  ----  |  ----  |  ----  |
+|  uint64_t  |  524288000  |  1024  |
+|  uint64_t  |  524288000  |  1024  |
