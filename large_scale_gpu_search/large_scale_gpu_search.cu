@@ -130,10 +130,10 @@ int main(int argc, char *argv[]) {
   // copy back the result
   thrust::copy(d_result.begin(), d_result.end(), h_gpu_search_result.begin());
 
-  bool is_equal = true;
+  std::string is_equal = "true";
   for (size_t idx = 0; idx < KEYS_NUMBERS; ++idx) {
     if (d_inputs_data[h_gpu_search_result[idx]] != h_keys[idx]) {
-      is_equal = false;
+      is_equal = "false";
     }
   }
   std::cout << "Is the result correct? " << is_equal << std::endl;
