@@ -104,10 +104,11 @@ int main(int argc, char *argv[]) {
   // 500MB numbers need for search
   size_t DATA_NUMBERS = 500 * 1024 * 1024;
   // 1KB numbers keys for search
-  size_t KEYS_NUMBERS = 1 * 1024;
+  size_t KEYS_NUMBERS = 1 * 2;
 
   thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
   thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
+  thrust::host_vector<size_t> h_gpu_search_result(KEYS_NUMBERS);
   thrust::device_vector<uint64_t> d_inputs_data(h_inputs_data);
   thrust::device_vector<uint64_t> d_keys(h_keys);
   thrust::device_vector<size_t> d_result(KEYS_NUMBERS);
@@ -124,6 +125,9 @@ int main(int argc, char *argv[]) {
       thrust::raw_pointer_cast(d_keys.data()),
       std::numeric_limits<uint64_t>::max(), DATA_NUMBERS,
       thrust::raw_pointer_cast(d_result.data()));
+  COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
+
+  thrust::copy(d_result.begin(), d_result.end(), h_gpu_search_result.begin());
 
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
