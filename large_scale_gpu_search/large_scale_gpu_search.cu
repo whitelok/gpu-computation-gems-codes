@@ -54,7 +54,7 @@ template <typename T>
 __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
                                        const T *__restrict__ search_keys,
                                        const T invalid_key_tag,
-                                       size_t range_length, T *result) {
+                                       size_t range_length, size_t *result) {
   __shared__ T cache[BLOCKSIZE + 2];
   __shared__ size_t range_offset;
   size_t range_start = 0;
@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
   thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
   thrust::device_vector<uint64_t> d_inputs_data(h_inputs_data);
   thrust::device_vector<uint64_t> d_keys(h_keys);
-  thrust::device_vector<uint64_t> d_result(KEYS_NUMBERS);
+  thrust::device_vector<size_t> d_result(KEYS_NUMBERS);
 
   cudaStream_t cuda_stream;
   COMMON_CUDA_CHECK(cudaStreamCreate(&cuda_stream));
