@@ -104,13 +104,14 @@ int main(int argc, char *argv[]) {
   // 500MB numbers need for search
   size_t DATA_NUMBERS = 500 * 1024 * 1024;
   // 1KB numbers keys for search
-  size_t KEYS_NUMBERS = 1 * 2;
+  size_t KEYS_NUMBERS = 1 * 1024;
 
   thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
   thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
   thrust::host_vector<size_t> h_gpu_search_result(KEYS_NUMBERS);
   thrust::device_vector<uint64_t> d_inputs_data(h_inputs_data);
   thrust::device_vector<uint64_t> d_keys(h_keys);
+  // the result is a key index
   thrust::device_vector<size_t> d_result(KEYS_NUMBERS);
 
   cudaStream_t cuda_stream;
@@ -126,16 +127,16 @@ int main(int argc, char *argv[]) {
       std::numeric_limits<uint64_t>::max(), DATA_NUMBERS,
       thrust::raw_pointer_cast(d_result.data()));
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
-
+  // copy back the result
   thrust::copy(d_result.begin(), d_result.end(), h_gpu_search_result.begin());
 
-  std::cout << h_gpu_search_result[0] << ", " << h_gpu_search_result[1]
-            << std::endl;
-
-  std::cout << d_inputs_data[h_gpu_search_result[0]] << ", "
-            << d_inputs_data[h_gpu_search_result[1]] << std::endl;
-
-  std::cout << h_keys[0] << ", " << h_keys[1] << std::endl;
+  bool is_equal = true;
+  for (const size_t idx = 0; idx < KEYS_NUMBERS; ++idx) {
+    if (d_inputs_data[h_gpu_search_result[idx]] != h_keys[idx]) {
+      is_equal = false;
+    }
+  }
+  std::cout << "Is the result correct? " << is_equal << std::endl;
 
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
