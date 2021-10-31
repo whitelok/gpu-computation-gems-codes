@@ -94,7 +94,7 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
   // store search result
   range_start = range_offset + threadIdx.x;
   if (search_key == data[range_start]) {
-    results[blockIdx.x] = range_start;
+    result[blockIdx.x] = range_start;
   }
 }
 
