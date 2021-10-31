@@ -1,5 +1,7 @@
 # GPU Computing Gems Jade Edition 2012 - Demo Codes
 
+GPU Computing Gems Jade Edition 2012实用示例代码
+
 ## Content
 
  1. Large-Scale GPU Search
@@ -20,3 +22,7 @@ cmake ..
 make -j8
 ./bin/[apps you want to run]
 ```
+
+## 1. Large-Scale GPU Search
+
+大规模GPU查找算法（有序数列查找）
