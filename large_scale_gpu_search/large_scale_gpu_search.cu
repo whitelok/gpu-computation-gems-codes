@@ -98,7 +98,8 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
   }
 }
 
-void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS) {
+void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
+               const size_t rounds) {
   // Just use GPU 0 for demo
   cudaSetDevice(0);
   cudaEvent_t t_start, t_stop;
