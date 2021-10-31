@@ -172,7 +172,7 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
 }
 
 int main(int argc, char *argv[]) {
-  size_t rounds = 1000;
+  size_t rounds = 100;
 
   // 500M numbers need for search
   size_t DATA_NUMBERS = 500 * 1024 * 1024;
