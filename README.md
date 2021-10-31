@@ -26,3 +26,12 @@ make -j8
 ## 1. Large-Scale GPU Search
 
 大规模GPU查找算法（有序数列查找）
+
+### Performance
+
+ - GPU: V100 * 1
+ 
+|  data length  |  keys number  |
+|  ----  | ----  |
+| 单元格  | 单元格 |
+| 单元格  | 单元格 |
