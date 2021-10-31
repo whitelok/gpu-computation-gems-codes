@@ -105,9 +105,10 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
   cudaEvent_t t_start, t_stop;
   cudaEventCreate(&t_start);
   cudaEventCreate(&t_stop);
-  
+
   std::cout << "Searching " << std::endl;
-  // std::cout << "Searching " << KEYS_NUMBERS " keys in " << DATA_NUMBERS << " numbers data with " << rounds << " rounds" << std::endl;
+  // std::cout << "Searching " << KEYS_NUMBERS " keys in " << DATA_NUMBERS << "
+  // numbers data with " << rounds << " rounds" << std::endl;
 
   thrust::host_vector<uint64_t> h_inputs_data(DATA_NUMBERS);
   thrust::host_vector<uint64_t> h_keys(KEYS_NUMBERS);
@@ -123,6 +124,16 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
   // init random numbers for demo
   InitInputs<uint64_t>(DATA_NUMBERS, KEYS_NUMBERS, h_inputs_data, h_keys,
                        d_inputs_data, d_keys);
+
+  // Warm up
+  for (size_t round = 0; round < 100; ++round) {
+    pary_search_gpu_kernel<uint64_t>
+        <<<KEYS_NUMBERS, BLOCKSIZE, 0, cuda_stream>>>(
+            thrust::raw_pointer_cast(d_inputs_data.data()),
+            thrust::raw_pointer_cast(d_keys.data()),
+            std::numeric_limits<uint64_t>::max(), DATA_NUMBERS,
+            thrust::raw_pointer_cast(d_result.data()));
+  }
 
   cudaEventRecord(t_start);
   for (size_t round = 0; round < rounds; ++round) {
