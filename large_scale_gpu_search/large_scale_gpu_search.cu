@@ -76,7 +76,7 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
   //   // cache the boundary keys
   //   range_start = range_offset + threadIdx.x * range_length;
   //   cache[threadIdx.x] = data[range_start];
-  }
+  // }
 }
 
 int main(int argc, char *argv[]) {
