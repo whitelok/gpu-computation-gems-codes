@@ -108,7 +108,7 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
   cudaEventCreate(&t_stop);
 
   // std::cout << "Searching " << std::endl;
-  std::cout << "Searching " << KEYS_NUMBERS << " keys in " << DATA_NUMBERS
+  std::cout << "> Searching " << KEYS_NUMBERS << " keys in " << DATA_NUMBERS
             << " numbers data with " << rounds << " rounds " << std::endl;
 
   thrust::host_vector<KeyType> h_inputs_data(DATA_NUMBERS);
@@ -162,9 +162,9 @@ void implement(const size_t DATA_NUMBERS, const size_t KEYS_NUMBERS,
       is_equal = "false";
     }
   }
-  std::cout << "Correct? : " << is_equal << std::endl;
+  std::cout << "> Correct? : " << is_equal << std::endl;
 
-  std::cout << "One round search average elasped: "
+  std::cout << "> One round search average elasped: "
             << static_cast<float>(milliseconds / rounds) << " ms" << std::endl;
 
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
