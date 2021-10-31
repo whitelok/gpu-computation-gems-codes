@@ -179,4 +179,10 @@ int main(int argc, char *argv[]) {
   // 1K numbers keys for search
   size_t KEYS_NUMBERS = 1 * 1024;
   implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
+
+  // 500M numbers need for search
+  size_t DATA_NUMBERS = 1024 * 1024 * 1024;
+  // 1K numbers keys for search
+  size_t KEYS_NUMBERS = 1 * 1024;
+  implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 }
