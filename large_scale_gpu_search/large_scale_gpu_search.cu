@@ -192,9 +192,9 @@ int main(int argc, char *argv[]) {
   KEYS_NUMBERS = 16 * 1024;
   implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 
-  // 4096M numbers need for search
+  // 500M numbers need for search
   DATA_NUMBERS = 500 * 1024 * 1024;
-  // 1K numbers keys for search
+  // 1M numbers keys for search
   KEYS_NUMBERS = 1024 * 1024;
   implement(DATA_NUMBERS, KEYS_NUMBERS, rounds);
 }
