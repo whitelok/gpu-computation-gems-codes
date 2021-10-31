@@ -57,7 +57,7 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
                                        size_t range_length, T *result) {
   __shared__ T cache[BLOCKSIZE + 2];
   __shared__ size_t range_offset;
-  const size_t range_start = 0;
+  size_t range_start = 0;
   size_t old_range_length = range_start;
   // NOTE(whitelok): initialize search range using a single thread
   if (threadIdx.x == 0) {
