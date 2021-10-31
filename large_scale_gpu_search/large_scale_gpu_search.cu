@@ -129,6 +129,9 @@ int main(int argc, char *argv[]) {
 
   thrust::copy(d_result.begin(), d_result.end(), h_gpu_search_result.begin());
 
+  std::cout << h_gpu_search_result[0] << ", " << h_gpu_search_result[1]
+            << std::endl;
+
   COMMON_CUDA_CHECK(cudaStreamSynchronize(cuda_stream));
   COMMON_CUDA_CHECK(cudaDeviceSynchronize());
   COMMON_CUDA_CHECK(cudaStreamDestroy(cuda_stream));
