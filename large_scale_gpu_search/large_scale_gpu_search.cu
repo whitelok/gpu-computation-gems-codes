@@ -66,12 +66,12 @@ __global__ void pary_search_gpu_kernel(const T *__restrict__ data,
   }
   __syncthreads();
   T search_key = cache[BLOCKSIZE + 1];
-  while (range_length > BLOCKSIZE) {
-    range_length = range_length / BLOCKSIZE;
-    // check for division underflow
-    if (range_length * BLOCKSIZE < old_range_length) {
-      range_length += 1;
-    }
+  // while (range_length > BLOCKSIZE) {
+  //   range_length = range_length / BLOCKSIZE;
+  //   // check for division underflow
+  //   if (range_length * BLOCKSIZE < old_range_length) {
+  //     range_length += 1;
+  //   }
   //   old_range_length = range_length;
   //   // cache the boundary keys
   //   range_start = range_offset + threadIdx.x * range_length;
